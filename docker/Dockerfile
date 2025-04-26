@@ -86,11 +86,15 @@ RUN if [ "$RAILS_ENV" = "production" ]; then \
   && rm -rf spec node_modules tmp/cache; \
   fi
 
-# Generate .git_sha file with current commit hash
+# … precompile assets …
 # RUN git rev-parse HEAD > /app/.git_sha
 
 # Remove unnecessary files
-RUN rm -rf /gems/ruby/3.3.0/cache/*.gem \
+RUN rm -rf /gems/ruby/3.3.0/cache/*.gem …
+#COPY --from=pre-builder /app/.git_sha /app/.git_sha
+
+# Remove unnecessary files
+RUN rm -rf /gems/ruby/3.3.0/cache/*.gem …
   && find /gems/ruby/3.3.0/gems/ \( -name "*.c" -o -name "*.o" \) -delete \
   && rm -rf .git \
   && rm .gitignore
@@ -145,7 +149,7 @@ COPY --from=pre-builder /gems/ /gems/
 COPY --from=pre-builder /app /app
 
 # Copy .git_sha file from pre-builder stage
-COPY --from=pre-builder /app/.git_sha /app/.git_sha
+#COPY --from=pre-builder /app/.git_sha /app/.git_sha
 
 WORKDIR /app
 
